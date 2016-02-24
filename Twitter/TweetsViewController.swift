@@ -23,10 +23,12 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.estimatedRowHeight = 120
         
         
-        TwitterClient.sharedInstance.homeTimelineWithParams(nil) { (tweets, error) -> () in
+    TwitterClient.sharedInstance.homeTimelineWithParams(nil) { (tweets, error) -> () in
             self.tweets = tweets
             
             self.tableView.reloadData()
+        
+        
         }
     }
     
@@ -39,21 +41,14 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBAction func onLogoutButton(sender: AnyObject) {
         User.currentUser?.logout()
     }
-
+    
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCellWithIdentifier("TweetCell", forIndexPath: indexPath) as! TweetCell
-            let tweetInfo = tweets![indexPath.row]
-            cell.profilePhotoView.setImageWithURL(NSURL(string: (tweetInfo.user?.profileImageUrl)!)!)
-            cell.nameLabel.text = tweetInfo.user?.name
-            cell.screennameLabel.text = "@" + (tweetInfo.user?.screenname)!
-            cell.timestampLabel.text = tweetInfo.createdAt
-            cell.tweetLabel.text = tweetInfo.text
-//            cell.retweetCountLabel.text = tweetInfo.retweetCount!
-//            cell.favoriteCountLabel.text = tweetInfo.favoriteCount!
-//            cell.tweetId = tweetInfo.tweetId
-//            cell.reTweetButton.setTitle(tweetInfo.tweetId, forState: .Normal)
-//            cell.favoriteButton.setTitle(tweetInfo.tweetId, forState: .Normal)
-            
+        
+        cell.selectionStyle = .None
+        cell.tweet = tweets![indexPath.row]
+        
             return cell
         }
         

@@ -9,8 +9,8 @@
 import UIKit
 import BDBOAuth1Manager
 
-let twitterConsumerKey = "2meD7FQbN4FY3vx0CrAnwmG9Y"
-let twitterConsumerSecret = "bcSmLkNfkaepKogcPPhE6abAQhRe1zvpeBrn45tCXTvYz7XzCj"
+let twitterConsumerKey = "tEpuNAEvuPV3pwm9XXOxeW7LG"
+let twitterConsumerSecret = "U7Lr57pbMacnMCLcJOoqOmQ4nrdT07po3XqC8hg9rDCOaBibsx"
 let twitterBaseURL = NSURL(string: "https://api.twitter.com")
 
 class TwitterClient: BDBOAuth1SessionManager {
@@ -39,25 +39,13 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
         
     }
-    
-    func retweet(id: String) {
-        let requestUrl = "1.1/statuses/retweet/" + id + ".json"
-        print(requestUrl)
-        POST(requestUrl, parameters: nil, success: nil, failure: nil)
-    }
-    
-    func favorite(id: String) {
-        let requestUrl = "1.1/favorites/create.json?id=" + id
-        print(requestUrl)
-        POST(requestUrl, parameters: nil, success: nil, failure: nil)
-    }
-    
+
     func loginWithCompletion(completion: (user: User?, error: NSError?) -> ()) {
         loginCompletion = completion
         
         // Fetch request token & redirect to authorization page
         TwitterClient.sharedInstance.requestSerializer.removeAccessToken()
-        TwitterClient.sharedInstance.fetchRequestTokenWithPath("oauth/request_token", method: "Get", callbackURL: NSURL(string: "cptwitterdemo://oauth"), scope: nil, success: {(requestToken: BDBOAuth1Credential!) -> Void in
+        TwitterClient.sharedInstance.fetchRequestTokenWithPath("oauth/request_token", method: "Get", callbackURL: NSURL(string: "twitterdemo://oauth"), scope: nil, success: {(requestToken: BDBOAuth1Credential!) -> Void in
             print("Got the request token")
             var authURL = NSURL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token)")
             UIApplication.sharedApplication().openURL(authURL!)
@@ -93,5 +81,18 @@ class TwitterClient: BDBOAuth1SessionManager {
                 self.loginCompletion?(user: nil, error: error)
         }
     }
+/*
+    func favorite(id: String(243138128959913986)) {
+        let requestUrl = "1.1/favorites/create.json?id=" + id
+        print(requestUrl)
+        POST(requestUrl, parameters: nil, success: nil, failure: nil)
+    }
+
+    func retweet(id: String(241259202004267009)) {
+        let requestUrl = "1.1/statuses/retweet/" + id + ".json"
+        print(requestUrl)
+        POST(requestUrl, parameters: nil, success: nil, failure: nil)
+    }
+*/    
 
 }
