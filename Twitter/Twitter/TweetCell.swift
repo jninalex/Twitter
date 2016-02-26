@@ -17,26 +17,28 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var tweetLabel: UILabel!
     @IBOutlet weak var replyButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
-    @IBOutlet weak var favoriteLabel: UILabel!
+    @IBOutlet weak var favoriteCountLabel: UILabel!
     @IBOutlet weak var retweetButton: UIButton!
-    @IBOutlet weak var retweetLabel: UILabel!
+    @IBOutlet weak var retweetCountLabel: UILabel!
+    
+    var retweeted = false
+    var favorited = false
     
     var tweet: Tweet! {
         didSet {
-            
             profilePhotoView.setImageWithURL(NSURL(string: (tweet.user!.profileImageUrl)!)!)
             nameLabel.text = tweet.user?.name
-            screennameLabel.text = "@\(tweet.user?.screenname!)"
-            timestampLabel.text = tweet.createdAt
+            screennameLabel.text = "@\(tweet.user!.screenname!)"
+            timestampLabel.text = tweet.timeSince
             tweetLabel.text = tweet.text
-            favoriteLabel.text = "\(tweet.favoritesCount!)"
-            retweetLabel.text = "\(tweet.retweetCount!)"
+            favoriteCountLabel.text = "\(tweet.favoritesCount!)"
+            retweetCountLabel.text = "\(tweet.retweetCount!)"
             
-            if favoriteLabel.text == "0" {
-                favoriteLabel.hidden = true
+            if favoriteCountLabel.text == "0" {
+                favoriteCountLabel.hidden = true
             }
-            if retweetLabel.text == "0" {
-                retweetLabel.hidden = true
+            if retweetCountLabel.text == "0" {
+                retweetCountLabel.hidden = true
             }
         }
     }
@@ -57,21 +59,32 @@ class TweetCell: UITableViewCell {
     }
     
     @IBAction func onFavorites(sender: AnyObject) {
-        sender.setImage(UIImage(named: "like"), forState: UIControlState.Normal)
-        if favoriteLabel.text == "0" {
-            favoriteLabel.hidden = false
+        if !favorited {
+            favorited  = true
+            sender.setImage(UIImage(named: "like-action-on-red"), forState: UIControlState.Normal)
+            if favoriteCountLabel.text == "0" {
+                favoriteCountLabel.hidden = false
+            }
+            favoriteCountLabel.text = String(tweet.favoritesCount!+1)
+        } else {
+            favorited = false
+            sender.setImage(UIImage(named: "like-action-off"), forState: UIControlState.Normal)
+            favoriteCountLabel.text = String(tweet.favoritesCount!)
         }
-        favoriteLabel.text = String(Int(favoriteLabel.text!)!+1)
     }
     
     @IBAction func onRetweet(sender: AnyObject) {
-        sender.setImage(UIImage(named: "retweet"), forState: UIControlState.Normal)
-       if retweetLabel.text == "0" {
-            retweetLabel.hidden = false
+        if !retweeted {
+            retweeted = true
+            sender.setImage(UIImage(named: "retweet-action-on-green"), forState: UIControlState.Normal)
+            if retweetCountLabel.text == "0" {
+                retweetCountLabel.hidden = false
+            }
+            retweetCountLabel.text = String(tweet.retweetCount!+1)
+        } else {
+            retweeted = false
+            sender.setImage(UIImage(named:"retweet-action_default"), forState: UIControlState.Normal)
+            retweetCountLabel.text = String(tweet.retweetCount!)
         }
-        retweetLabel.text = String(Int(retweetLabel.text!)!+1)
-
     }
-
-    
 }
